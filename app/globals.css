@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Theme Toggle Animation */
+.toggle {
+  --step: 0.5s;
+  --ease: linear(
+    0 0%,
+    0.2342 12.49%,
+    0.4374 24.99%,
+    0.6093 37.49%,
+    0.6835 43.74%,
+    0.7499 49.99%,
+    0.8086 56.25%,
+    0.8593 62.5%,
+    0.9023 68.75%,
+    0.9375 75%,
+    0.9648 81.25%,
+    0.9844 87.5%,
+    0.9961 93.75%,
+    1 100%
+  );
+}
+
+.toggle::before {
+  content: '';
+  width: 150vmax;
+  height: 200vmax;
+  aspect-ratio: 1;
+  border-radius: 0%;
+  background: radial-gradient(hsl(0 0% 100% / 0.25), hsl(0 0% 0% / 1) 35%);
+  position: absolute;
+  translate: -50% -65%;
+  left: 50%;
+  top: 50%;
+  z-index: -1;
+  opacity: 0.35;
+  scale: 0;
+  transition: scale var(--step) var(--ease);
+}
+
+.toggle[aria-pressed='true']::before {
+  scale: 2;
+  opacity: 0;
+}
+
+.toggle[aria-pressed='true'] .face {
+  scale: 1.12;
+}
+
+.toggle[aria-pressed='true'] .socket {
+  box-shadow: -0.025em 0.08em 0.2em -0.1em white;
+}
+
+.toggle[aria-pressed='true'] .face-glowdrop {
+  scale: 1;
+}
+
+.toggle[aria-pressed='true'] .face-shadow::before {
+  translate: -15% 55%;
+  filter: blur(1em);
+  opacity: 0.35;
+}
+
+.toggle[aria-pressed='true'] .face-shadow::after {
+  filter: blur(0.5em);
+  scale: 1;
+}
+
+.toggle[aria-pressed='true'] .socket-shadow,
+.toggle[aria-pressed='true'] .face-glows,
+.toggle[aria-pressed='true'] .face-shine {
+  opacity: 1;
+}
+
+.toggle:active .socket {
+  box-shadow: -0.045em 0.1em 0.2em -0.15em white;
+}
+
+.toggle:active .face {
+  scale: 0.99;
+}
