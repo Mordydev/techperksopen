@@ -1,0 +1,91 @@
+## 1. Understand Before You Change
+- **Read and review** the relevant file(s) before making any modifications.  
+- Seek to **fully grasp** the purpose of the existing code and how it fits into the broader project.  
+- Confirm you **understand** the requirements or user stories associated with the changes. 
+- Revisit the latest **`instructions.md`** to ensure you have the correct context and checklist items before proceeding.
+
+## 2. Plan in Detail Before Coding
+- Thoroughly **review `instructions.md`** (checklist at the top, context in the middle, changes at the bottom):
+  - If the checklist does not exist, **ask for clarification** and create one at the top.  
+  - If the checklist is incomplete or unclear, **ask questions** or offer suggestions to improve it before continuing.
+- **Outline a step-by-step plan** (pseudocode is encouraged) describing the intended changes or new features.  
+- Confirm your plan aligns with `instructions.md`; then proceed to code once everything is clear.
+
+## 3. Code Implementation Guidelines
+- **Write correct, best-practice, DRY (Don’t Repeat Yourself) code** to the best of your ability.
+- Prioritize **readability** and ensure code is functional and robust.  
+- **Fully implement** all requested functionality (no placeholders, unimplemented stubs, or TODO notes).  
+- If there might not be a correct answer, **state so**. If you don’t know, **say so** rather than guess.  
+- **Use early returns** to simplify logic and improve readability.  
+- **Use Tailwind classes** for styling HTML elements when appropriate; **prefer Shadcn** components or patterns when creating or modifying UI for consistency and best practices.  
+- When using dynamic class bindings, prefer using `class:` syntax rather than ternary operators.  
+- **Name variables and functions descriptively**, e.g., `handleClick` or `toggleSidebar`, using `handle` prefixes for event handlers.  
+- Include **accessibility features** (e.g., `tabindex="0"`, `aria-label`, `on:click`, `on:keydown`) on interactive elements.  
+- Use `const` instead of function declarations when possible. If feasible, **define a type** for function parameters and return values.
+
+### 3a. Design & User Experience (UX/UI) Considerations
+- **Mobile-first**: Ensure layouts and features work seamlessly on small screens before scaling up.  
+- **Modern, minimalistic** design principles: Keep interfaces clean, intuitive, and consistent.  
+- **Interactive elements**: Use clear, functional components that enhance user experience.  
+- Focus on **responsiveness** and alignment with **current UI/UX trends** (e.g., minimalistic styling, consistent spacing, intuitive navigation).  
+- You are an AI specialized in software development, **UX/UI design**, and **business logic**, so leverage your **best judgment and expertise** to craft polished, user-friendly solutions.
+
+## 4. Use `instructions.md` for Logging & Tracking
+1. **Confirm or Refine `instructions.md`**  
+   - If `instructions.md` does **not** exist:
+     - Create it, then list all needed tasks in a **checklist format** at the top.  
+     - Provide additional context or details below the checklist (middle), and a section at the bottom for **changes**.  
+   - If `instructions.md` **does** exist:
+     - **Review** it thoroughly (checklist at the top, context in the middle, any prior changes at the bottom).  
+     - If there is no checklist, create one at the top based on the provided instructions.  
+     - If there is a partial checklist, refine it to ensure it covers all tasks.  
+   - If you see ambiguities or possible improvements, **ask clarifying questions** or suggest enhancements to us before proceeding.
+   - When the plan is confirmed as “best it can be,” **start or continue** with the tasks.
+
+2. **Check Off & Log Completion** (after **5** file updates)  
+   - Each time you update **5 files**, open `instructions.md` and:  
+     - **Check off** the tasks you’ve completed at the top.  
+     - **Append** a new log entry at the bottom (the newest log is always last): 
+       1. **Date & Time** (`MM-DD-YYYY HH:MM`)  
+       2. **Short Summary** of changes  
+       3. **Reason** for the changes  
+       4. **Affected Files** and how they were updated  
+       5. **Impact** (dependencies, side effects, potential conflicts)  
+       6. **Suggestions & Next Steps** (immediate follow-ups, long-term enhancements, rationale)  
+     - **Leave all remaining tasks** unchecked so it’s clear what still needs to be done.  
+   - **Re-review `instructions.md`** after logging changes to stay aligned with the plan—remind yourself of what’s done and what remains.
+
+3. **Complete & Archive**  
+   - Once **all tasks** in `instructions.md` are done, **rename** the file to reflect what was accomplished (for example, `MM-DD-YYYY_homepage-implemented.md`).  
+   - Move the renamed file into a `/completed` folder (no need to say “completed” in the filename, since the folder already indicates completion).  
+   - Start a **new `instructions.md`** for the next set of tasks, repeating this process. 
+
+## 5. Maintain a Clear Workflow
+1. **Review** the relevant code or files thoroughly.  
+2. **Check `instructions.md`** for the checklist, context, and past changes.
+3. **Plan** the solution in detail (pseudocode).  
+4. **Implement** the changes following these guidelines (including design & UX).  
+5. **Test** or review the impact of changes.  
+6. **After every 5 file updates**:  
+   - **Check off** completed tasks in `instructions.md`.  
+   - **Append** a new changes log at the bottom.  
+   - **Re-check** what’s done vs. what remains.  
+7. **Archive** the instructions when the entire checklist is done by renaming and moving to `/completed`.  
+8. **Repeat** with a new `instructions.md` for additional tasks.
+
+## 6. Format & Hygiene
+- Keep each task log **concise yet accurate**—avoid unnecessary details.  
+- **No placeholders**—ensure code is complete and functional before finalizing.  
+- Avoid storing **sensitive** or **personal** information in logs.  
+- Ensure the **checklist** in `instructions.md` is always updated (checked-off vs. pending tasks).  
+- **Use your best judgment**—you are an AI with expertise in software development, UX/UI design, and application logic.
+
+---
+
+### Why This Format?
+1. **Shadcn + Tailwind**: Ensures a consistent, modern, and maintainable UI.  
+2. **Checklist at the Top**: Offers a quick snapshot of progress and outstanding tasks.  
+3. **Context & Instructions in the Middle**: Keeps reference material handy for clarity.  
+4. **Changes at the Bottom**: Appending logs chronologically helps maintain a clear record of what was done and when.  
+5. **5-File Interval**: Frequent updates promote tighter feedback loops and avoid confusion.  
+6. **Archived History**: Renaming and moving the file to `/completed` provides a well-organized record of finished tasks.
