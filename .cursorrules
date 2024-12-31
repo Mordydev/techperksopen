@@ -1,0 +1,87 @@
+## 1. Understand Before You Change
+- **Review** the relevant project files thoroughly before making modifications.  
+- **Read `instructions.md`** carefully to understand all requirements and additional context.  
+  - Do **not** edit `instructions.md`; it remains your source of truth.  
+  - If any parts are unclear or incomplete, **ask questions** or **offer suggestions** to clarify before proceeding.
+
+## 2. Plan in Detail Before Coding
+1. **Check `instructions.md`** carefully, noting design guidelines, business logic, or anything critical.  
+2. **Create or Update `checklist.md`** (if it doesn’t already exist):
+   - **Top Section**: A clear Markdown checklist of tasks derived from `instructions.md`.  
+   - **Middle Section**: An **implementation plan**, which you can update as you refine your approach.  
+   - **Bottom Section**: A “Changes Log,” where entries are appended after every 5 files.  
+3. **Outline a Step-by-Step Implementation Plan** (pseudocode encouraged) in the **middle** of `checklist.md`:  
+   - Keep it up-to-date with tasks from `instructions.md`, plus any additional tasks you foresee.  
+   - This plan may **change** over time as you discover new needs or clarifications.  
+4. When confident in your plan and with no major ambiguities, **begin coding**.
+
+## 3. Code Implementation Guidelines
+- **Write correct, DRY code** (Don’t Repeat Yourself) focused on clarity and maintainability.  
+- **Fulfill all requested functionality**—avoid placeholders or unimplemented stubs.  
+- If you encounter ambiguities or lack certain details, **ask** instead of guessing.  
+- **Use early returns** to keep logic straightforward.
+
+### 3a. Styling & UI/UX
+- **Prefer Shadcn** components integrated with **Tailwind** for cohesive, modern UI.
+- Adopt a **mobile-first** mindset, ensuring responsiveness and minimalistic, intuitive design.
+- Provide **accessibility features** where needed.
+- **Descriptive naming** for functions and variables (e.g., `handleClick`, `toggleSidebar`).
+- Define **types** for function parameters and returns whenever beneficial.
+
+## 4. Use `instructions.md` (Read-Only) & `checklist.md` (Editable)
+1. **`instructions.md`**  
+   - Remains **unchanged**, providing context, requirements, or business logic.  
+   - Revisit it as often as needed to clarify tasks but do **not** edit it.
+
+2. **`checklist.md`**  
+   - Create it if it doesn’t exist, using `instructions.md` to form an initial top-level checklist and an implementation plan in the middle.  
+   - If `checklist.md` exists, **review** and refine it to ensure alignment with `instructions.md`.  
+   - Keep the **top** for tasks, the **middle** for your evolving implementation plan, and the **bottom** for changes logs.  
+   - Update or add items to the checklist if new tasks emerge during development (do not remove old tasks; just check them off).
+
+## 5. Update & Re-plan Every 5 File Updates
+1. **Every time you update 5 files**, return to `checklist.md`:  
+   - **Check off** completed items in the **top checklist**.  
+   - Update or refine your **Implementation Plan** in the **middle** if new insights, tasks, or adjustments are needed.  
+  - **Append** a new log entry at the **bottom**, detailing:
+     1. **Date & Time** (e.g., `MM-DD-YYYY HH:MM`)  
+     2. **Short Summary** of what changed  
+     3. **Reason** for those changes  
+     4. **Affected Files** and how they were updated  
+     5. **Impact** (dependencies, side effects, etc.)  
+     6. **Suggestions & Next Steps** (new tasks, refinements, or improvements)
+2. **Re-check** your top checklist to confirm what’s left.  
+3. **Revisit** `instructions.md` to ensure you’re still aligned with the original requirements. 
+4. **Adapt** as needed - if the plan has changed significantly, reflect that in the `checklist.md`.
+
+## 6. Complete & Archive Both Files
+- Once all tasks in the **checklist** are done (and your implementation plan is fully executed):
+  1. **Rename** both `instructions.md` and `checklist.md` to reflect the final outcome and date, e.g.,  
+     `09-15-2024_feature-x_instructions.md` and `09-15-2024_feature-x_checklist.md`.  
+  2. Move both files into the `/completed` folder.  
+  3. If new tasks arise, create a fresh `instructions.md` and `checklist.md` set.
+
+## 7. Maintain a Clear Workflow
+1. **Review** relevant project files for clarity.
+2. **Reference** `instructions.md` for official guidance.  
+3. **Create/Update** `checklist.md` with tasks, an implementation plan, and a changes log.  
+4. **Plan** in detail (pseudocode, strategy, etc.) before coding.  
+5. **Implement** changes, focusing on clarity, best practices, and modern UI via Shadcn + Tailwind.   
+6. **Test** thoroughly for side effects and correctness.   
+7. **Every 5 Files**: - Update `checklist.md`: check off tasks, add a new log entry, refine your plan. - Revisit `instructions.md` to ensure accuracy. 
+8. **Archive** both files to `/completed` after the checklist is fully addressed.
+
+## 8. Format & Hygiene
+- **Concise yet clear logs** in `checklist.md`.  
+- **No placeholders**—only production-ready code.  
+- Avoid storing **sensitive** or **personal** data.  
+- If `instructions.md` seems incomplete or contradictory, **ask** for clarity or suggest improvements.
+
+---
+
+### Why This Format?
+- **Two-File System**: `instructions.md` remains a stable source of truth, while `checklist.md` evolves as you code and discover new tasks.  
+- **Mid-Project Re-planning**: Updating the middle “Implementation Plan” section every 5 file updates ensures flexibility and quick adaptation to new findings.  
+- **Shadcn + Tailwind**: Maintains a modern and consistent UI across the project.  
+- **Comprehensive Logging**: Clear, chronological logs in `checklist.md` let you track your progress, side effects, and newly discovered improvements.  
+- **Archival**: Renaming and moving both files to `/completed` provides an organized historical record for future reference.
