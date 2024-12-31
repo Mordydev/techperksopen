@@ -69,6 +69,24 @@ export type PostSort = {
 
 export type ViewLayout = 'compact' | 'detailed' | 'grid'
 
+export type CalendarSettings = {
+  firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6
+  workingHours: {
+    start: number
+    end: number
+  }
+  timezone: string
+  showWeekNumbers: boolean
+  defaultView: 'week' | 'month'
+}
+
+export type CalendarFilter = {
+  memoType?: 'voice' | 'chat' | 'ai_call'
+  projectId?: string
+  status?: PostStatus
+  tags?: string[]
+}
+
 interface ContentStore {
   posts: Post[]
   threads: Thread[]
@@ -103,6 +121,12 @@ interface ContentStore {
   bulkAssignProject: (ids: string[], projectId: string) => void
   bulkArchive: (ids: string[]) => void
   bulkDelete: (ids: string[]) => void
+  // Calendar State
+  calendarSettings: CalendarSettings
+  calendarFilter: CalendarFilter
+  // Calendar Actions
+  setCalendarSettings: (settings: Partial<CalendarSettings>) => void
+  setCalendarFilter: (filter: CalendarFilter) => void
 }
 
 const createContentStore: StateCreator<ContentStore> = (set) => ({
@@ -249,6 +273,31 @@ const createContentStore: StateCreator<ContentStore> = (set) => ({
     set((state) => ({
       posts: state.posts.filter((post) => !ids.includes(post.id)),
     })),
+
+  // Initial Calendar State
+  calendarSettings: {
+    firstDayOfWeek: 0,
+    workingHours: {
+      start: 9,
+      end: 17,
+    },
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    showWeekNumbers: false,
+    defaultView: 'week',
+  },
+  calendarFilter: {},
+
+  // Calendar Actions
+  setCalendarSettings: (settings: Partial<CalendarSettings>) =>
+    set((state) => ({
+      calendarSettings: {
+        ...state.calendarSettings,
+        ...settings,
+      },
+    })),
+
+  setCalendarFilter: (filter: CalendarFilter) =>
+    set((state) => ({ calendarFilter: filter })),
 })
 
 export const useContentStore = create<ContentStore>(createContentStore) 
