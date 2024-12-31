@@ -2,42 +2,30 @@
 
 import { useState, useEffect } from 'react';
 
-export const useMediaQuery = (query: string): boolean => {
+export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const media = window.matchMedia(query);
     
-    const updateMatch = (e: MediaQueryListEvent | MediaQueryList) => {
-      setMatches(e.matches);
+    // Set initial value
+    setMatches(media.matches);
+
+    // Create event listener
+    const listener = (event: MediaQueryListEvent) => {
+      setMatches(event.matches);
     };
 
-    // Initial check
-    updateMatch(media);
-
     // Add listener
-    if ('addEventListener' in media) {
-      media.addEventListener('change', updateMatch);
-    } else {
-      // Fallback for older browsers
-      (media as any).addListener(updateMatch);
-    }
+    media.addEventListener('change', listener);
 
+    // Clean up
     return () => {
-      // Cleanup
-      if ('removeEventListener' in media) {
-        media.removeEventListener('change', updateMatch);
-      } else {
-        // Fallback for older browsers
-        (media as any).removeListener(updateMatch);
-      }
+      media.removeEventListener('change', listener);
     };
   }, [query]);
 
-  // Return false on the server, true only on the client if it matches
-  return mounted ? matches : false;
-};
+  return matches;
+}
 
 export default useMediaQuery; 

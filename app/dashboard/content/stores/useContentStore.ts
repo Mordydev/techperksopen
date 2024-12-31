@@ -1,19 +1,23 @@
 import { create } from 'zustand'
 import { StateCreator } from 'zustand'
+import { MemoType } from '../contexts/FilterContext'
 
 export type PostStatus = 'pending' | 'draft' | 'needs-changes' | 'scheduled' | 'published'
 
 export type PostSource = {
-  type: 'ai_call' | 'voice_note' | 'chat_thread'
+  type: MemoType
   id: string
   timestamp: Date
 }
+
+export type PostPriority = 'high' | 'medium' | 'low'
 
 export type Post = {
   id: string
   title: string
   content: string
   status: PostStatus
+  priority?: PostPriority
   scheduledFor?: Date
   tags: string[]
   stats?: {
@@ -30,7 +34,19 @@ export type Thread = {
   id: string
   title: string
   type: 'chat' | 'voice'
-  content?: string[]
+  content: Array<{
+    id: string
+    type: 'message' | 'voice'
+    content: string
+    timestamp: Date
+    sender: 'user' | 'ai'
+    attachments?: Array<{
+      id: string
+      name: string
+      url: string
+      type: string
+    }>
+  }>
   tags: string[]
   createdAt: Date
   isArchived?: boolean
@@ -55,7 +71,7 @@ export type PostFilter = {
     start: Date
     end: Date
   }
-  memoType?: 'voice' | 'chat' | 'ai_call'
+  memoType?: MemoType
   projectId?: string
   status?: PostStatus
   tags?: string[]
@@ -81,7 +97,7 @@ export type CalendarSettings = {
 }
 
 export type CalendarFilter = {
-  memoType?: 'voice' | 'chat' | 'ai_call'
+  memoType?: MemoType
   projectId?: string
   status?: PostStatus
   tags?: string[]
@@ -127,12 +143,146 @@ interface ContentStore {
   // Calendar Actions
   setCalendarSettings: (settings: Partial<CalendarSettings>) => void
   setCalendarFilter: (filter: CalendarFilter) => void
+  deleteThread: (id: string) => void
 }
 
+// Mock Data
+const mockPosts: Post[] = [
+  {
+    id: '1',
+    title: 'Product Launch Strategy',
+    content: 'Key points from our AI strategy call discussing the upcoming product launch...',
+    status: 'scheduled',
+    priority: 'high',
+    scheduledFor: new Date('2024-02-20T10:00:00'),
+    tags: ['product', 'launch', 'strategy'],
+    source: {
+      type: 'ai_call',
+      id: 'call_1',
+      timestamp: new Date('2024-02-15T10:00:00')
+    },
+    projectId: 'thread_1'
+  },
+  {
+    id: '2',
+    title: 'Customer Feedback Summary',
+    content: 'Voice memo from the customer feedback session...',
+    status: 'draft',
+    priority: 'medium',
+    tags: ['feedback', 'customer'],
+    source: {
+      type: 'voice_note',
+      id: 'memo_1',
+      timestamp: new Date('2024-02-14T15:30:00')
+    },
+    projectId: 'thread_2'
+  },
+  {
+    id: '3',
+    title: 'Team Brainstorming Results',
+    content: 'Chat discussion about new feature ideas...',
+    status: 'pending',
+    tags: ['features', 'brainstorming'],
+    source: {
+      type: 'chat_thread',
+      id: 'chat_1',
+      timestamp: new Date('2024-02-13T14:00:00')
+    },
+    projectId: 'thread_1'
+  }
+]
+
+const mockThreads: Thread[] = [
+  {
+    id: 'thread_1',
+    title: 'Q1 Product Launch',
+    type: 'chat',
+    content: [
+      {
+        id: 'message_1',
+        type: 'message',
+        content: 'Initial planning discussion',
+        timestamp: new Date('2024-02-10T09:00:00'),
+        sender: 'user'
+      },
+      {
+        id: 'message_2',
+        type: 'message',
+        content: 'Feature prioritization',
+        timestamp: new Date('2024-02-10T09:30:00'),
+        sender: 'ai'
+      },
+      {
+        id: 'message_3',
+        type: 'message',
+        content: 'Marketing strategy',
+        timestamp: new Date('2024-02-10T10:00:00'),
+        sender: 'ai'
+      }
+    ],
+    tags: ['product', 'launch', 'Q1'],
+    createdAt: new Date('2024-02-10T09:00:00'),
+    isArchived: false
+  },
+  {
+    id: 'thread_2',
+    title: 'Customer Research',
+    type: 'voice',
+    content: [
+      {
+        id: 'voice_1',
+        type: 'voice',
+        content: 'Interview with John Doe',
+        timestamp: new Date('2024-02-12T11:00:00'),
+        sender: 'ai'
+      },
+      {
+        id: 'voice_2',
+        type: 'voice',
+        content: 'Feedback session notes',
+        timestamp: new Date('2024-02-12T11:30:00'),
+        sender: 'ai'
+      },
+      {
+        id: 'voice_3',
+        type: 'voice',
+        content: 'Action items',
+        timestamp: new Date('2024-02-12T12:00:00'),
+        sender: 'ai'
+      }
+    ],
+    tags: ['research', 'customer', 'feedback'],
+    createdAt: new Date('2024-02-12T11:00:00'),
+    isArchived: false
+  }
+]
+
+const mockAICalls: AICall[] = [
+  {
+    id: 'call_1',
+    scheduledFor: new Date('2024-02-20T10:00:00'),
+    status: 'scheduled',
+    notes: 'Product launch strategy discussion',
+    recurrence: {
+      frequency: 'weekly',
+      interval: 1,
+      endDate: new Date('2024-03-20T10:00:00')
+    },
+    timezone: 'America/New_York'
+  },
+  {
+    id: 'call_2',
+    scheduledFor: new Date('2024-02-22T15:00:00'),
+    status: 'scheduled',
+    notes: 'Marketing campaign planning',
+    timezone: 'America/New_York'
+  }
+]
+
 const createContentStore: StateCreator<ContentStore> = (set) => ({
-  posts: [],
-  threads: [],
-  aiCalls: [],
+  posts: mockPosts,
+  threads: mockThreads,
+  aiCalls: mockAICalls,
 
   // Post Actions
   createPost: (post: Omit<Post, 'id'>) =>
@@ -298,6 +448,11 @@ const createContentStore: StateCreator<ContentStore> = (set) => ({
 
   setCalendarFilter: (filter: CalendarFilter) =>
     set((state) => ({ calendarFilter: filter })),
+
+  deleteThread: (id: string) =>
+    set((state) => ({
+      threads: state.threads.filter((thread) => thread.id !== id),
+    })),
 })
 
 export const useContentStore = create<ContentStore>(createContentStore) 
