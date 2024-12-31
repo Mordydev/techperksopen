@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { format, isBefore, addMinutes, startOfToday } from 'date-fns'
+import { format, isBefore, addMinutes, startOfToday, addDays, isSameDay } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
@@ -29,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { DatePicker } from "@/components/ui/date-picker"
 
 interface ScheduleAICallModalProps {
   isOpen: boolean
@@ -50,6 +51,21 @@ export function ScheduleAICallModal({ isOpen, onClose }: ScheduleAICallModalProp
 
   const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'))
   const minutes = ['00', '15', '30', '45']
+
+  // Add quick date options
+  const quickDates = [
+    { label: 'Today', value: startOfToday() },
+    { label: 'Tomorrow', value: addDays(startOfToday(), 1) },
+    { label: 'Next Week', value: addDays(startOfToday(), 7) },
+  ]
+
+  // Add business hours presets
+  const timePresets = [
+    { label: 'Morning', hour: '09', minute: '00' },
+    { label: 'Noon', hour: '12', minute: '00' },
+    { label: 'Afternoon', hour: '14', minute: '00' },
+    { label: 'Evening', hour: '16', minute: '00' },
+  ]
 
   const validateDateTime = (selectedDate: Date) => {
     const now = new Date()
@@ -112,32 +128,65 @@ export function ScheduleAICallModal({ isOpen, onClose }: ScheduleAICallModalProp
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Date</Label>
-              <Popover>
-                <PopoverTrigger asChild>
+              <Label>Quick Select</Label>
+              <div className="flex gap-2">
+                {quickDates.map((quickDate) => (
                   <Button
+                    key={quickDate.label}
                     variant="outline"
+                    size="sm"
+                    onClick={() => setDate(quickDate.value)}
                     className={cn(
-                      'w-full justify-start text-left font-normal',
-                      !date && 'text-muted-foreground'
+                      'flex-1',
+                      date && isSameDay(date, quickDate.value) && 'bg-primary text-primary-foreground'
                     )}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, 'PPP') : 'Pick a date'}
+                    {quickDate.label}
                   </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    disabled={(date: Date) =>
-                      isBefore(date, minDate) || isBefore(maxDate, date)
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Date</Label>
+              <DatePicker
+                mode="single"
+                date={date}
+                onSelect={setDate}
+                disabled={(date) =>
+                  isBefore(date, minDate) || isBefore(maxDate, date)
+                }
+                fromDate={minDate}
+                toDate={maxDate}
+                required
+                className="w-full"
+                captionLayout="dropdown"
+                showWeekNumber={false}
+                weekStartsOn={1}
+                placeholder="Select a date"
+                defaultMonth={new Date()}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Time Presets</Label>
+              <div className="flex gap-2">
+                {timePresets.map((preset) => (
+                  <Button
+                    key={preset.label}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setTimeSlot({ hour: preset.hour, minute: preset.minute })}
+                    className={cn(
+                      'flex-1',
+                      timeSlot.hour === preset.hour && timeSlot.minute === preset.minute && 
+                      'bg-primary text-primary-foreground'
+                    )}
+                  >
+                    {preset.label}
+                  </Button>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

@@ -17,6 +17,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Filter, Save, Calendar as CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import { toast } from 'sonner'
+import { DatePicker } from "@/components/ui/date-picker"
+import { type DateRange } from "react-day-picker"
+import { cn } from "@/lib/utils"
 
 interface FilterBarProps {
   onSaveFilter?: (name: string, filter: any) => void
@@ -55,8 +58,15 @@ export function FilterBar({
     toast.success('Filter saved')
   }
 
+  const dateRange = postFilter.dateRange
+    ? {
+        from: postFilter.dateRange.start,
+        to: postFilter.dateRange.end,
+      }
+    : undefined
+
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
+    <div className={cn('flex flex-wrap items-center gap-2', className)}>
       <Select
         value={postFilter.status || 'all'}
         onValueChange={(value) => {
@@ -98,40 +108,29 @@ export function FilterBar({
       </Select>
 
       {showDateRange && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="w-auto justify-start text-left">
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {postFilter.dateRange ? (
-                <>
-                  {format(postFilter.dateRange.start, 'PP')} -{' '}
-                  {format(postFilter.dateRange.end, 'PP')}
-                </>
-              ) : (
-                <span>Pick a date range</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="range"
-              selected={{
-                from: postFilter.dateRange?.start,
-                to: postFilter.dateRange?.end,
-              }}
-              onSelect={(range) => {
-                if (range?.from && range?.to) {
-                  handleFilterChange({
-                    dateRange: {
-                      start: range.from,
-                      end: range.to,
-                    },
-                  })
-                }
-              }}
-            />
-          </PopoverContent>
-        </Popover>
+        <DatePicker
+          mode="range"
+          selected={dateRange}
+          onSelect={(range: DateRange | undefined) => {
+            if (range?.from && range?.to) {
+              handleFilterChange({
+                dateRange: {
+                  start: range.from,
+                  end: range.to,
+                },
+              })
+            }
+          }}
+          placeholder="Filter by date range"
+          numberOfMonths={2}
+          showWeekNumber={false}
+          weekStartsOn={1}
+          className="w-[300px]"
+          captionLayout="dropdown"
+          fixedWeeks
+          fromDate={new Date(2020, 0, 1)}
+          defaultMonth={new Date()}
+        />
       )}
 
       {showSearch && (

@@ -34,6 +34,7 @@ import {
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { useContentCalendarStore } from "@/lib/hooks/useContentCalendarStore"
+import { DatePicker } from "@/components/ui/date-picker"
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -172,37 +173,23 @@ export function EditPostModal({ post, onSave }: EditPostModalProps) {
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Schedule For</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <FormControl>
+                    <DatePicker
+                      mode="single"
+                      date={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date < new Date() || date < new Date("1900-01-01")
+                      }
+                      required
+                      className="w-full"
+                      captionLayout="dropdown"
+                      showWeekNumber={false}
+                      weekStartsOn={1}
+                      placeholder="Select a date"
+                      defaultMonth={new Date()}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
